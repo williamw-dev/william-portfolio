@@ -1,0 +1,415 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --animate-scan: scan 7s ease-in-out infinite;
+  --animate-drift: drift 12s ease-in-out infinite;
+  @keyframes scan {
+    0%,
+    100% {
+      transform: translateX(-35%);
+      opacity: 0;
+    }
+    20%,
+    80% {
+      opacity: 0.55;
+    }
+    50% {
+      transform: translateX(135%);
+      opacity: 0.2;
+    }
+  }
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -8px, 0);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-zinc-300 dark:border-zinc-800;
+  }
+  html {
+    @apply bg-zinc-50 text-zinc-950 antialiased dark:bg-[#090909] dark:text-zinc-100;
+  }
+  body {
+    @apply m-0 min-w-0 overflow-x-hidden bg-zinc-50 font-sans dark:bg-[#090909];
+  }
+  html::after {
+    content: '';
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0,
+      rgb(94 140 255 / 0.1) 44%,
+      #5e8cff 50%,
+      rgb(94 140 255 / 0.1) 56%,
+      transparent 100%
+    );
+    transform: translate3d(-100%, 0, 0);
+  }
+  html.is-theme-switching::after {
+    animation: theme-scan 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.is-theme-switching body,
+  html.is-theme-switching [data-theme-surface],
+  html.is-theme-switching header,
+  html.is-theme-switching .project-card,
+  html.is-theme-switching .trace-console,
+  html.is-theme-switching .activity-cell,
+  html.is-theme-switching .project-node rect {
+    transition:
+      color 260ms ease,
+      background-color 260ms ease,
+      border-color 260ms ease,
+      fill 260ms ease;
+  }
+  ::selection {
+    @apply bg-zinc-950 text-white dark:bg-zinc-100 dark:text-zinc-950;
+  }
+  a,
+  button {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 dark:focus-visible:ring-offset-[#090909];
+  }
+}
+
+@layer components {
+  .section-boundary {
+    @apply border-t-4 border-double;
+  }
+  .architecture-grid,
+  .project-grid {
+    background-image:
+      linear-gradient(rgb(113 113 122 / 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(113 113 122 / 0.1) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .trace-body {
+    min-height: 338px;
+  }
+  .trace-track {
+    background-image: linear-gradient(
+      90deg,
+      transparent calc(25% - 0.5px),
+      rgb(113 113 122 / 0.18) 25%,
+      transparent calc(25% + 0.5px),
+      transparent calc(50% - 0.5px),
+      rgb(113 113 122 / 0.18) 50%,
+      transparent calc(50% + 0.5px),
+      transparent calc(75% - 0.5px),
+      rgb(113 113 122 / 0.18) 75%,
+      transparent calc(75% + 0.5px)
+    );
+  }
+  .trace-span {
+    border-left: 1px solid #5e8cff;
+    border-right: 1px solid #5e8cff;
+    color: rgb(113 113 122);
+    background: rgb(94 140 255 / 0.08);
+    transition:
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+  .trace-row:hover .trace-span {
+    color: #5e8cff;
+    background: rgb(94 140 255 / 0.18);
+  }
+  .trace-span-root {
+    border-top: 1px solid rgb(94 140 255 / 0.55);
+    border-bottom: 1px solid rgb(94 140 255 / 0.55);
+  }
+  .trace-span-fast {
+    background: rgb(16 185 129 / 0.12);
+    border-color: rgb(16 185 129 / 0.8);
+  }
+  .trace-span-async {
+    background: repeating-linear-gradient(
+      -45deg,
+      rgb(94 140 255 / 0.12),
+      rgb(94 140 255 / 0.12) 3px,
+      transparent 3px,
+      transparent 6px
+    );
+  }
+  .trace-span-data {
+    border-right-style: double;
+    border-right-width: 3px;
+  }
+  .trace-span-telemetry {
+    border-style: dotted;
+    background: transparent;
+  }
+  .trace-packet {
+    animation: trace-flight 3.4s linear infinite;
+    box-shadow: 0 0 9px rgb(94 140 255 / 0.8);
+  }
+  .trace-edge {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    writing-mode: vertical-rl;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 6px;
+    letter-spacing: 0.18em;
+    color: rgb(113 113 122 / 0.8);
+  }
+  .trace-edge-left {
+    left: 3px;
+    transform: translateY(-50%) rotate(180deg);
+  }
+  .trace-edge-right {
+    right: 3px;
+    transform: translateY(-50%);
+  }
+  .topology-guides path {
+    fill: none;
+    stroke: rgb(113 113 122 / 0.18);
+    stroke-width: 0.65;
+    stroke-dasharray: 2 4;
+  }
+  .topology-links path,
+  .project-path path {
+    fill: none;
+    stroke: rgb(113 113 122 / 0.62);
+    stroke-width: 1;
+  }
+  .topology-active-path path,
+  .project-path-active path {
+    fill: none;
+    stroke: #5e8cff;
+    stroke-width: 1.5;
+    stroke-dasharray: 8 5;
+    animation: signal-flow 1.2s linear infinite;
+  }
+  .topology-node rect,
+  .project-node rect {
+    fill: var(--color-zinc-50);
+    stroke: rgb(113 113 122 / 0.65);
+    stroke-width: 0.8;
+  }
+  [data-theme='dark'] .topology-node rect,
+  [data-theme='dark'] .project-node rect {
+    fill: #090909;
+  }
+  .topology-node text,
+  .project-node text,
+  .topology-entry text,
+  .topology-terminal text {
+    fill: rgb(113 113 122);
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 7px;
+    letter-spacing: 0.08em;
+  }
+  .topology-entry circle:first-child,
+  .project-origin {
+    fill: #5e8cff;
+  }
+  .topology-entry circle {
+    fill: #5e8cff;
+  }
+  .topology-terminal circle:first-child {
+    fill: #5e8cff;
+  }
+  .topology-ping {
+    fill: none;
+    stroke: #5e8cff;
+    animation: topology-ping 2s ease-out infinite;
+    transform-origin: 646px 119px;
+  }
+  .topology-terminal path {
+    fill: none;
+    stroke: #5e8cff;
+    stroke-width: 1;
+  }
+  .project-card {
+    box-shadow: 3px 3px 0 rgb(113 113 122 / 0.14);
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .project-card:hover {
+    border-color: #5e8cff;
+    box-shadow: 5px 5px 0 rgb(94 140 255 / 0.16);
+    transform: translate(-2px, -2px);
+  }
+  .contact-link {
+    @apply flex items-center gap-2 border border-dotted px-3 py-2 text-xs transition-[border-color,color,transform,box-shadow];
+  }
+  .contact-link:hover {
+    @apply border-blue-500 text-blue-500;
+    box-shadow: 2px 2px 0 rgb(94 140 255 / 0.16);
+    transform: translate(-1px, -1px);
+  }
+  .social-link {
+    @apply grid size-8 place-items-center border border-dotted text-zinc-500 transition-[color,border-color,transform];
+  }
+  .social-link:hover {
+    @apply -translate-y-0.5 border-blue-500 text-blue-500;
+  }
+  .blog-entry > summary::-webkit-details-marker {
+    display: none;
+  }
+  .blog-entry > summary {
+    transition: background-color 180ms ease;
+  }
+  .blog-entry > summary:hover,
+  .blog-entry[open] > summary {
+    background: rgb(94 140 255 / 0.04);
+  }
+  .blog-entry[open] > summary h2 {
+    color: #5e8cff;
+  }
+  .blog-entry code:not(pre code) {
+    @apply border border-zinc-300 bg-zinc-100 px-1 py-0.5 font-mono text-[0.82em] text-zinc-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300;
+  }
+  .blog-entry strong {
+    @apply font-medium text-zinc-950 dark:text-zinc-100;
+  }
+  .is-theme-switching .theme-icon {
+    animation: theme-icon-turn 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .role-ticker-text {
+    animation: role-enter 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    inset: auto 50% -4px;
+    height: 1px;
+    background: #5e8cff;
+    transition: inset 180ms ease;
+  }
+  .nav-link[aria-current='page']::after {
+    inset-inline: 0;
+  }
+  .nav-progress {
+    width: 0;
+    opacity: 0;
+  }
+  .nav-progress.is-running {
+    animation: nav-progress 700ms ease-in-out infinite;
+  }
+  .activity-cell {
+    @apply aspect-square min-w-0 border border-zinc-300 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-950;
+  }
+  .activity-1 {
+    @apply border-blue-400/40 bg-blue-200 dark:bg-blue-950;
+  }
+  .activity-2 {
+    @apply border-blue-400/70 bg-blue-400 dark:bg-blue-700;
+  }
+  .activity-3 {
+    @apply border-blue-500 bg-blue-600 dark:bg-blue-400;
+  }
+  .activity-4 {
+    @apply border-blue-400 bg-blue-800 dark:border-blue-300 dark:bg-blue-200;
+  }
+  .back-to-top {
+    right: max(1rem, calc((100vw - 820px) / 2 - 56px));
+  }
+}
+
+@keyframes signal-flow {
+  to {
+    stroke-dashoffset: -13;
+  }
+}
+@keyframes trace-flight {
+  from {
+    left: 0;
+    opacity: 0;
+  }
+  8%,
+  88% {
+    opacity: 1;
+  }
+  to {
+    left: calc(100% - 6px);
+    opacity: 0;
+  }
+}
+@keyframes theme-scan {
+  0% {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+}
+@keyframes theme-icon-turn {
+  from {
+    transform: rotate(-120deg) scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes role-enter {
+  from {
+    opacity: 0;
+    transform: translateY(70%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes topology-ping {
+  from {
+    opacity: 0.8;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+@keyframes nav-progress {
+  0% {
+    left: 0;
+    width: 0;
+    opacity: 1;
+  }
+  60% {
+    left: 25%;
+    width: 60%;
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    width: 0;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topology-active-path path,
+  .project-path-active path,
+  .topology-ping,
+  .nav-progress.is-running,
+  .role-ticker-text,
+  .trace-packet,
+  .is-theme-switching .theme-icon,
+  html.is-theme-switching::after {
+    animation: none;
+  }
+}

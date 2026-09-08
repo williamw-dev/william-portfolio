@@ -1,0 +1,9 @@
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+node_modules
+.output
+src/paraglide
+project.inlang/cache
+project.inlang/.meta.json
+project.inlang/README.md

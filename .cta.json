@@ -1,0 +1,17 @@
+{
+  "projectName": "william-portfolio",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": false,
+  "packageManager": "pnpm",
+  "git": false,
+  "install": true,
+  "intent": false,
+  "addOnOptions": {},
+  "projectPreset": "blank",
+  "includeExamples": false,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": ["eslint", "nitro"]
+}
