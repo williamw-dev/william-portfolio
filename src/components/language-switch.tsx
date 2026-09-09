@@ -1,7 +1,12 @@
 import { useRouterState } from '@tanstack/react-router'
 import { LuLanguages } from 'react-icons/lu'
 
-import { deLocalizeHref, getLocale, localizeHref } from '#/paraglide/runtime'
+import {
+  deLocalizeHref,
+  getLocale,
+  localizeHref,
+  setLocale,
+} from '#/paraglide/runtime'
 import * as m from '#/paraglide/messages'
 
 export function LanguageSwitch() {
@@ -19,6 +24,10 @@ export function LanguageSwitch() {
       href={targetHref}
       hrefLang={target}
       aria-label={m.language_label()}
+      onClick={(event) => {
+        event.preventDefault()
+        void setLocale(target)
+      }}
       className="flex h-9 items-center gap-1.5 px-1 text-xs text-zinc-500 transition-colors hover:text-zinc-950 dark:hover:text-white"
     >
       <LuLanguages size={14} />

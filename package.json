@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
-    "generate:i18n": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --strategy url preferredLanguage baseLocale --emit-ts-declarations",
+    "generate:i18n": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --strategy url cookie preferredLanguage baseLocale --emit-ts-declarations",
     "build": "vite build",
     "preview": "vite preview",
     "preview:cloudflare": "pnpm build && wrangler pages dev dist",

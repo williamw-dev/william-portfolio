@@ -14,7 +14,7 @@ const config = defineConfig({
     paraglideVitePlugin({
       project: './project.inlang',
       outdir: './src/paraglide',
-      strategy: ['url', 'preferredLanguage', 'baseLocale'],
+      strategy: ['url', 'cookie', 'preferredLanguage', 'baseLocale'],
       emitTsDeclarations: true,
     }),
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
