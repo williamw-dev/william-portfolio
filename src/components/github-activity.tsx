@@ -1,20 +1,10 @@
 import { FaGithub } from 'react-icons/fa6'
 import { LuArrowUpRight } from 'react-icons/lu'
-import { useEffect, useState } from 'react'
 
 import { SectionTitle } from '#/components/portfolio-sections'
+import type { Contribution, GitHubActivityData } from '#/data/github-activity'
 import * as m from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
-
-type Contribution = {
-  date: string
-  count: number
-  level: 0 | 1 | 2 | 3 | 4
-}
-type ContributionsResponse = {
-  contributions: Array<Contribution>
-  total: Record<string, number>
-}
 
 function recentDays(total: number) {
   const today = new Date()
@@ -26,36 +16,19 @@ function recentDays(total: number) {
   })
 }
 
-export function GitHubActivity() {
+export function GitHubActivity({
+  data,
+}: {
+  data: GitHubActivityData | null | undefined
+}) {
   const locale = getLocale()
-  const [contributions, setContributions] = useState<Array<Contribution>>(() =>
-    recentDays(364).map((date) => ({ date, count: 0, level: 0 })),
-  )
-  const [failed, setFailed] = useState(false)
-  const [total, setTotal] = useState<number | null>(null)
-
-  useEffect(() => {
-    const controller = new AbortController()
-    fetch(
-      'https://github-contributions-api.jogruber.de/v4/williamw-dev?y=last',
-      {
-        signal: controller.signal,
-      },
-    )
-      .then((response) => {
-        if (!response.ok) throw new Error('GitHub API unavailable')
-        return response.json() as Promise<ContributionsResponse>
-      })
-      .then((response) => {
-        setContributions(response.contributions.slice(-364))
-        setTotal(response.total.lastYear)
-      })
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === 'AbortError') return
-        setFailed(true)
-      })
-    return () => controller.abort()
-  }, [])
+  const contributions =
+    data?.contributions ??
+    recentDays(364).map<Contribution>((date) => ({
+      date,
+      count: 0,
+      level: 0,
+    }))
 
   const firstDay = new Date(`${contributions[0]?.date}T00:00:00Z`).getUTCDay()
   const padded: Array<Contribution | null> = [
@@ -74,13 +47,13 @@ export function GitHubActivity() {
         <div className="mb-5 flex items-start justify-between gap-6">
           <div>
             <p className="max-w-sm text-xs leading-5 text-zinc-500">
-              {failed
+              {data === null
                 ? m.github_activity_error()
                 : m.github_activity_description()}
             </p>
-            {total !== null ? (
+            {data ? (
               <p className="mt-2 font-mono text-[10px] text-blue-500">
-                <strong className="font-medium">{total}</strong>{' '}
+                <strong className="font-medium">{data.total}</strong>{' '}
                 {m.github_contributions_suffix()}
               </p>
             ) : null}

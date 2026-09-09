@@ -1,13 +1,11 @@
 import { Link, Outlet, useRouterState } from '@tanstack/react-router'
 import { FaGithub, FaLinkedin, FaXTwitter } from 'react-icons/fa6'
-import { useEffect } from 'react'
 
 import { LanguageSwitch } from '#/components/language-switch'
 import { BackToTop } from '#/components/back-to-top'
 import { ParisClock } from '#/components/paris-clock'
 import { ThemeToggle } from '#/components/theme-toggle'
 import * as m from '#/paraglide/messages'
-import { getLocale } from '#/paraglide/runtime'
 
 const nav = [
   { to: '/', label: m.nav_home },
@@ -17,14 +15,9 @@ const nav = [
 ] as const
 
 export function SiteShell() {
-  const locale = getLocale()
   const isNavigating = useRouterState({
     select: (state) => state.status === 'pending',
   })
-
-  useEffect(() => {
-    document.documentElement.lang = locale
-  }, [locale])
 
   return (
     <>

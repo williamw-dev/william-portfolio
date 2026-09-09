@@ -1,3 +1,4 @@
+import { Await } from '@tanstack/react-router'
 import { FaLinkedin, FaXTwitter } from 'react-icons/fa6'
 import { LuBadgeCheck, LuFileText, LuMail } from 'react-icons/lu'
 
@@ -11,10 +12,15 @@ import {
   StackSection,
 } from '#/components/portfolio-sections'
 import { RoleTicker } from '#/components/role-ticker'
+import type { GitHubActivityData } from '#/data/github-activity'
 import * as m from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 
-export function HomePage() {
+export function HomePage({
+  githubActivity,
+}: {
+  githubActivity: Promise<GitHubActivityData | null>
+}) {
   const locale = getLocale()
   const resumeHref = `/resume/william-wautrin-cv-${locale}.pdf`
 
@@ -101,7 +107,12 @@ export function HomePage() {
         </div>
       </section>
       <ProjectsSection />
-      <GitHubActivity />
+      <Await
+        promise={githubActivity}
+        fallback={<GitHubActivity data={undefined} />}
+      >
+        {(data) => <GitHubActivity data={data} />}
+      </Await>
       <ExperienceSection />
       <CertificationsSection />
       <StackSection />

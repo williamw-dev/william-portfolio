@@ -1,19 +1,14 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
-import { getRequest } from '@tanstack/react-start/server'
 import type { ReactNode } from 'react'
 
 import '@fontsource-variable/geist'
 
 import { NotFoundPage } from '#/components/not-found-page'
 import { SiteShell } from '#/components/site-shell'
+import { SITE_ORIGIN } from '#/config/site'
 import { getLocale, localizeUrl } from '#/paraglide/runtime'
 import * as m from '#/paraglide/messages'
 import appCss from '#/styles.css?url'
-
-const getSiteOrigin = createServerFn({ method: 'GET' }).handler(() => {
-  return new URL(getRequest().url).origin
-})
 
 function seoCopy(pathname: string) {
   if (pathname === '/projects')
@@ -32,16 +27,14 @@ function seoCopy(pathname: string) {
 }
 
 export const Route = createRootRoute({
-  loader: () => getSiteOrigin(),
-  head: ({ loaderData, matches }) => {
+  head: ({ matches }) => {
     const locale = getLocale()
     const matchedPath = matches.at(-1)?.pathname ?? '/'
     const pathname = matchedPath.replace(/^\/(?:fr|en)(?=\/|$)/, '') || '/'
-    const origin = loaderData ?? ''
-    const canonical = origin
-      ? localizeUrl(new URL(pathname, origin), { locale }).href
-      : pathname
-    const image = origin ? new URL('/og.png', origin).href : '/og.png'
+    const canonical = localizeUrl(new URL(pathname, SITE_ORIGIN), {
+      locale,
+    }).href
+    const image = new URL('/og.png', SITE_ORIGIN).href
     const { title, description } = seoCopy(pathname)
     return {
       meta: [
@@ -95,23 +88,23 @@ export const Route = createRootRoute({
         {
           rel: 'alternate',
           hrefLang: 'fr',
-          href: origin
-            ? localizeUrl(new URL(pathname, origin), { locale: 'fr' }).href
-            : `/fr${pathname}`,
+          href: localizeUrl(new URL(pathname, SITE_ORIGIN), {
+            locale: 'fr',
+          }).href,
         },
         {
           rel: 'alternate',
           hrefLang: 'en',
-          href: origin
-            ? localizeUrl(new URL(pathname, origin), { locale: 'en' }).href
-            : `/en${pathname}`,
+          href: localizeUrl(new URL(pathname, SITE_ORIGIN), {
+            locale: 'en',
+          }).href,
         },
         {
           rel: 'alternate',
           hrefLang: 'x-default',
-          href: origin
-            ? localizeUrl(new URL(pathname, origin), { locale: 'en' }).href
-            : `/en${pathname}`,
+          href: localizeUrl(new URL(pathname, SITE_ORIGIN), {
+            locale: 'en',
+          }).href,
         },
         { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
         { rel: 'manifest', href: '/site.webmanifest' },
@@ -123,7 +116,7 @@ export const Route = createRootRoute({
             '@context': 'https://schema.org',
             '@type': 'Person',
             name: 'William Wautrin',
-            url: canonical,
+            url: SITE_ORIGIN,
             image,
             jobTitle: 'Software & Platform Engineer',
             address: {
