@@ -31,7 +31,7 @@ export function NetworkField() {
         <span className="sm:hidden">RESULT_01</span>
       </div>
 
-      <div className="trace-body architecture-grid relative px-4 pb-12 pt-8 sm:px-6 sm:pb-14 sm:pt-10">
+      <div className="trace-body architecture-grid relative px-4 pb-9 pt-6 sm:px-6 sm:pb-14 sm:pt-10">
         <div className="trace-edge trace-edge-left">CLOUD / EDGE</div>
         <div className="trace-edge trace-edge-right">OPERABLE BY DESIGN</div>
         <div className="mb-4 grid grid-cols-[76px_1fr] items-end gap-3 sm:grid-cols-[106px_1fr] sm:gap-5">
@@ -42,12 +42,19 @@ export function NetworkField() {
             </p>
           </div>
           <div className="flex justify-between border-b border-dotted pb-1 font-mono text-[7px] text-zinc-400">
-            {ticks.map((tick) => (
-              <span key={tick}>{tick}</span>
+            {ticks.map((tick, index) => (
+              <span
+                key={tick}
+                className={
+                  index === 1 || index === 3 ? 'hidden min-[390px]:inline' : ''
+                }
+              >
+                {tick}
+              </span>
             ))}
           </div>
         </div>
-        <div className="space-y-2.5">
+        <div className="space-y-2 sm:space-y-2.5">
           {spans.map((span, index) => (
             <div
               key={span.label}
@@ -75,7 +82,7 @@ export function NetworkField() {
           <span>TANSTACK START</span>
           <span>SSR</span>
           <span>I18N</span>
-          <span>TYPESCRIPT</span>
+          <span className="hidden min-[390px]:inline">TYPESCRIPT</span>
         </div>
         <span className="absolute bottom-3 right-4 hidden font-mono text-[7px] text-zinc-500 sm:block sm:right-6">
           PAR · 48.8566° N

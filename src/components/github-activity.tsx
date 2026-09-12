@@ -41,7 +41,7 @@ export function GitHubActivity({
   )
 
   return (
-    <section className="section-boundary px-4 py-12 sm:px-6 sm:py-16">
+    <section className="deferred-section section-boundary px-4 py-12 sm:px-6 sm:py-16">
       <SectionTitle>{m.github_activity_title()}</SectionTitle>
       <div className="border-y-4 border-double py-5">
         <div className="mb-5 flex items-start justify-between gap-6">
@@ -62,7 +62,7 @@ export function GitHubActivity({
             href="https://github.com/williamw-dev"
             target="_blank"
             rel="noreferrer"
-            className="flex shrink-0 items-center gap-1 text-[10px] text-zinc-500 hover:text-blue-500"
+            className="flex min-h-8 min-w-8 shrink-0 items-center justify-center gap-1 text-[10px] text-zinc-500 hover:text-blue-500"
           >
             <FaGithub size={12} />
             <span className="hidden sm:inline">{m.github_profile_label()}</span>

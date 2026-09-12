@@ -27,7 +27,11 @@ export function SiteShell() {
       >
         <header className="sticky top-0 z-50 border-b border-dotted bg-zinc-50/90 backdrop-blur-md dark:bg-[#090909]/90">
           <div className="flex h-16 items-center justify-between gap-2 px-4 sm:px-6">
-            <Link to="/" aria-label="William Wautrin — accueil">
+            <Link
+              to="/"
+              aria-label="William Wautrin — accueil"
+              className="inline-flex min-h-9 items-center px-1"
+            >
               <ParisClock />
             </Link>
             <div className="flex items-center gap-2 sm:gap-3">
@@ -35,7 +39,7 @@ export function SiteShell() {
                 href="https://github.com/williamw-dev"
                 target="_blank"
                 rel="noreferrer"
-                className="flex h-9 items-center gap-1.5 text-xs text-zinc-500 transition-colors hover:text-zinc-950 dark:hover:text-white"
+                className="flex h-9 min-w-9 items-center justify-center gap-1.5 text-xs text-zinc-500 transition-colors hover:text-zinc-950 sm:min-w-0 dark:hover:text-white"
               >
                 <FaGithub size={15} />
                 <span className="hidden sm:inline">{m.github_label()}</span>
@@ -55,7 +59,7 @@ export function SiteShell() {
                 to={item.to}
                 activeProps={{ className: 'text-zinc-950 dark:text-white' }}
                 activeOptions={{ exact: item.to === '/' }}
-                className="nav-link relative whitespace-nowrap pb-0.5 transition-colors"
+                className="nav-link relative inline-flex min-h-8 min-w-8 items-center justify-center whitespace-nowrap px-1 transition-colors"
               >
                 {item.label()}
               </Link>

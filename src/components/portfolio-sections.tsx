@@ -154,8 +154,12 @@ function ProjectVisual({
 }) {
   const topology = projectTopologies[variant]
   return (
-    <div className="project-grid relative h-40 overflow-hidden border-b border-dotted">
-      <svg viewBox="0 0 360 150" className="h-full w-full" aria-hidden="true">
+    <div className="project-grid relative h-40 min-w-0 max-w-full overflow-hidden border-b border-dotted">
+      <svg
+        viewBox="0 0 360 150"
+        className="block h-full min-w-0 max-w-full"
+        aria-hidden="true"
+      >
         <g className="project-path">
           {topology.paths.map((path) => (
             <path key={path} d={path} />
@@ -198,7 +202,7 @@ export function ProjectsSection({ page = false }: { page?: boolean }) {
           {m.projects_page_intro()}
         </p>
       )}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid min-w-0 gap-3 sm:grid-cols-2">
         {projects.map(
           ({
             name,
@@ -214,7 +218,7 @@ export function ProjectsSection({ page = false }: { page?: boolean }) {
               href={href}
               target="_blank"
               rel="noreferrer"
-              className="project-card group relative overflow-hidden border border-zinc-300 bg-zinc-50 dark:border-zinc-800 dark:bg-[#090909]"
+              className="project-card group relative min-w-0 max-w-full overflow-hidden border border-zinc-300 bg-zinc-50 dark:border-zinc-800 dark:bg-[#090909]"
             >
               <ProjectVisual variant={variant} />
               <div className="p-4 sm:p-5">
@@ -245,7 +249,7 @@ export function ProjectsSection({ page = false }: { page?: boolean }) {
       {!page && (
         <Link
           to="/projects"
-          className="mt-6 inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-blue-500"
+          className="mt-6 inline-flex min-h-8 items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-blue-500"
         >
           {m.projects_more_label()}
           <LuArrowUpRight size={12} />
@@ -347,7 +351,7 @@ export function ExperienceSection({ page = false }: { page?: boolean }) {
 
 function ExperiencePreview() {
   return (
-    <section className="section-boundary px-4 py-12 sm:px-6 sm:py-16">
+    <section className="deferred-section section-boundary px-4 py-12 sm:px-6 sm:py-16">
       <SectionTitle>{m.experience_title()}</SectionTitle>
       <ol className="border-y-4 border-double">
         {experiences.map((experience) => (
@@ -370,7 +374,7 @@ function ExperiencePreview() {
       </ol>
       <Link
         to="/experience"
-        className="mt-6 inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-blue-500"
+        className="mt-6 inline-flex min-h-8 items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-blue-500"
       >
         {m.experience_more_label()}
         <LuArrowUpRight size={12} />
@@ -430,7 +434,7 @@ const certifications = [
 
 export function CertificationsSection() {
   return (
-    <section className="section-boundary px-4 py-12 sm:px-6 sm:py-16">
+    <section className="deferred-section section-boundary px-4 py-12 sm:px-6 sm:py-16">
       <SectionTitle>{m.certifications_title()}</SectionTitle>
       <div className="grid gap-6 sm:grid-cols-[1fr_1.55fr]">
         <div>
@@ -486,7 +490,7 @@ export function StackSection() {
     },
   ]
   return (
-    <section className="section-boundary px-4 py-12 sm:px-6 sm:py-16">
+    <section className="deferred-section section-boundary px-4 py-12 sm:px-6 sm:py-16">
       <SectionTitle>{m.stack_title()}</SectionTitle>
       <p className="mb-6 max-w-md text-xs leading-5 text-zinc-500">
         {m.stack_description()}

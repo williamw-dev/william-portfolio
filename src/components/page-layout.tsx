@@ -14,7 +14,7 @@ export function PageLayout({
     <main className="min-h-[calc(100dvh-153px)] px-4 py-12 sm:px-6 sm:py-16">
       <Link
         to="/"
-        className="mb-10 inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-zinc-950 dark:hover:text-white"
+        className="mb-10 inline-flex min-h-8 items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-zinc-950 dark:hover:text-white"
       >
         <LuArrowLeft size={13} />
         {m.back_home()}

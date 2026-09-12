@@ -25,7 +25,7 @@ export function HomePage({
   const resumeHref = `/resume/william-wautrin-cv-${locale}.pdf`
 
   return (
-    <main>
+    <main className="min-w-0">
       <NetworkField />
       <section className="px-4 py-10 sm:px-6 sm:py-14">
         <div className="flex items-start justify-between gap-5">
