@@ -5,12 +5,22 @@ import '@fontsource-variable/geist'
 
 import { NotFoundPage } from '#/components/not-found-page'
 import { SiteShell } from '#/components/site-shell'
-import { SITE_ORIGIN } from '#/config/site'
+import {
+  getLocalizedContentPath,
+  isGkeArticlePath,
+  SITE_ORIGIN,
+} from '#/config/site'
+import { gkeArticleEn } from '#/content/gke-article.en'
+import { gkeArticleFr } from '#/content/gke-article.fr'
 import { getLocale, localizeUrl } from '#/paraglide/runtime'
 import * as m from '#/paraglide/messages'
 import appCss from '#/styles.css?url'
 
-function seoCopy(pathname: string) {
+function seoCopy(pathname: string, locale: 'en' | 'fr') {
+  if (isGkeArticlePath(pathname)) {
+    const article = locale === 'fr' ? gkeArticleFr : gkeArticleEn
+    return { title: article.title, description: article.excerpt }
+  }
   if (pathname === '/projects')
     return {
       title: m.seo_projects_title(),
@@ -31,11 +41,73 @@ export const Route = createRootRoute({
     const locale = getLocale()
     const matchedPath = matches.at(-1)?.pathname ?? '/'
     const pathname = matchedPath.replace(/^\/(?:fr|en)(?=\/|$)/, '') || '/'
-    const canonical = localizeUrl(new URL(pathname, SITE_ORIGIN), {
+    const localizedPathname = getLocalizedContentPath(pathname, locale)
+    const canonical = localizeUrl(new URL(localizedPathname, SITE_ORIGIN), {
       locale,
     }).href
-    const image = new URL('/og.png', SITE_ORIGIN).href
-    const { title, description } = seoCopy(pathname)
+    const isArticle = isGkeArticlePath(pathname)
+    const image = new URL(isArticle ? '/og-gke.png' : '/og.png', SITE_ORIGIN)
+      .href
+    const personImage = new URL('/william-wautrin.jpeg', SITE_ORIGIN).href
+    const { title, description } = seoCopy(pathname, locale)
+    const personId = `${SITE_ORIGIN}/#person`
+    const websiteId = `${SITE_ORIGIN}/#website`
+    const structuredData: Array<Record<string, unknown>> = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        '@id': personId,
+        name: 'William Wautrin',
+        url: `${SITE_ORIGIN}/`,
+        image: personImage,
+        jobTitle: 'Software & Platform Engineer',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Paris',
+          addressCountry: 'FR',
+        },
+        sameAs: [
+          'https://github.com/williamw-dev',
+          'https://x.com/builtbywilliam',
+          'https://www.linkedin.com/in/william-www',
+          'https://www.credly.com/users/william-wautrin',
+        ],
+        knowsAbout: [
+          'Cloud architecture',
+          'Kubernetes',
+          'Terraform',
+          'Platform engineering',
+          'Distributed systems',
+          'Backend engineering',
+        ],
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        '@id': websiteId,
+        name: 'William Wautrin',
+        url: `${SITE_ORIGIN}/`,
+        inLanguage: ['en', 'fr'],
+        author: { '@id': personId },
+      },
+    ]
+
+    if (isArticle) {
+      structuredData.push({
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: title,
+        description,
+        image,
+        datePublished: '2025',
+        inLanguage: locale,
+        url: canonical,
+        mainEntityOfPage: canonical,
+        author: { '@id': personId },
+        isPartOf: { '@id': websiteId },
+        about: ['GKE', 'GitOps', 'Kubernetes', 'Argo CD'],
+      })
+    }
     return {
       meta: [
         { charSet: 'utf-8' },
@@ -62,7 +134,7 @@ export const Route = createRootRoute({
           media: '(prefers-color-scheme: light)',
           content: '#fafafa',
         },
-        { property: 'og:type', content: 'website' },
+        { property: 'og:type', content: isArticle ? 'article' : 'website' },
         { property: 'og:site_name', content: 'William Wautrin' },
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
@@ -88,59 +160,34 @@ export const Route = createRootRoute({
         {
           rel: 'alternate',
           hrefLang: 'fr',
-          href: localizeUrl(new URL(pathname, SITE_ORIGIN), {
-            locale: 'fr',
-          }).href,
+          href: localizeUrl(
+            new URL(getLocalizedContentPath(pathname, 'fr'), SITE_ORIGIN),
+            { locale: 'fr' },
+          ).href,
         },
         {
           rel: 'alternate',
           hrefLang: 'en',
-          href: localizeUrl(new URL(pathname, SITE_ORIGIN), {
-            locale: 'en',
-          }).href,
+          href: localizeUrl(
+            new URL(getLocalizedContentPath(pathname, 'en'), SITE_ORIGIN),
+            { locale: 'en' },
+          ).href,
         },
         {
           rel: 'alternate',
           hrefLang: 'x-default',
-          href: localizeUrl(new URL(pathname, SITE_ORIGIN), {
-            locale: 'en',
-          }).href,
+          href: localizeUrl(
+            new URL(getLocalizedContentPath(pathname, 'en'), SITE_ORIGIN),
+            { locale: 'en' },
+          ).href,
         },
         { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
         { rel: 'manifest', href: '/site.webmanifest' },
       ],
-      scripts: [
-        {
-          type: 'application/ld+json',
-          children: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Person',
-            name: 'William Wautrin',
-            url: SITE_ORIGIN,
-            image,
-            jobTitle: 'Software & Platform Engineer',
-            address: {
-              '@type': 'PostalAddress',
-              addressLocality: 'Paris',
-              addressCountry: 'FR',
-            },
-            sameAs: [
-              'https://github.com/williamw-dev',
-              'https://x.com/builtbywilliam',
-              'https://www.linkedin.com/in/william-www',
-              'https://www.credly.com/users/william-wautrin',
-            ],
-            knowsAbout: [
-              'Cloud architecture',
-              'Kubernetes',
-              'Terraform',
-              'Platform engineering',
-              'Distributed systems',
-              'Backend engineering',
-            ],
-          }),
-        },
-      ],
+      scripts: structuredData.map((data) => ({
+        type: 'application/ld+json',
+        children: JSON.stringify(data),
+      })),
     }
   },
   component: SiteShell,

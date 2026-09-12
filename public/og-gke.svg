@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#090909"/>
+  <g stroke="#27272a" stroke-width="1" opacity=".7">
+    <path d="M0 70H1200M0 140H1200M0 210H1200M0 280H1200M0 350H1200M0 420H1200M0 490H1200M0 560H1200"/>
+    <path d="M70 0V630M140 0V630M210 0V630M280 0V630M350 0V630M420 0V630M490 0V630M560 0V630M630 0V630M700 0V630M770 0V630M840 0V630M910 0V630M980 0V630M1050 0V630M1120 0V630"/>
+  </g>
+  <rect x="48" y="48" width="1104" height="534" fill="none" stroke="#52525b" stroke-dasharray="3 7"/>
+  <text x="82" y="100" fill="#5e8cff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" letter-spacing="3">FIELD NOTE 001 / GKE + GITOPS</text>
+  <text x="82" y="185" fill="#fafafa" font-family="Arial, Helvetica, sans-serif" font-size="55" font-weight="600">Deploying a full-stack</text>
+  <text x="82" y="250" fill="#fafafa" font-family="Arial, Helvetica, sans-serif" font-size="55" font-weight="600">application on GKE</text>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">
+    <path d="M180 405H275M405 405H500M630 405H725M855 405H950" fill="none" stroke="#5e8cff" stroke-width="2" stroke-dasharray="8 7"/>
+    <g fill="#090909" stroke="#71717a">
+      <rect x="80" y="370" width="100" height="70"/><rect x="275" y="370" width="130" height="70"/><rect x="500" y="370" width="130" height="70"/><rect x="725" y="370" width="130" height="70"/>
+    </g>
+    <rect x="950" y="370" width="120" height="70" fill="#090909" stroke="#5e8cff" stroke-width="2"/>
+    <g fill="#a1a1aa"><text x="130" y="410">CODE</text><text x="340" y="410">CI / GHCR</text><text x="565" y="410">GIT STATE</text><text x="790" y="410">ARGO CD</text></g>
+    <text x="1010" y="410" fill="#5e8cff">GKE</text>
+  </g>
+  <text x="82" y="535" fill="#71717a" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15">WILLIAM WAUTRIN / CLOUD + PLATFORM ENGINEERING</text>
+</svg>

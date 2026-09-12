@@ -258,18 +258,17 @@
   .social-link:hover {
     @apply -translate-y-0.5 border-blue-500 text-blue-500;
   }
-  .blog-entry > summary::-webkit-details-marker {
-    display: none;
+  .blog-card {
+    box-shadow: 3px 3px 0 rgb(113 113 122 / 0.14);
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
   }
-  .blog-entry > summary {
-    transition: background-color 180ms ease;
-  }
-  .blog-entry > summary:hover,
-  .blog-entry[open] > summary {
-    background: rgb(94 140 255 / 0.04);
-  }
-  .blog-entry[open] > summary h2 {
-    color: #5e8cff;
+  .blog-card:hover {
+    border-color: #5e8cff;
+    box-shadow: 5px 5px 0 rgb(94 140 255 / 0.16);
+    transform: translate(-2px, -2px);
   }
   .blog-entry code:not(pre code) {
     @apply border border-zinc-300 bg-zinc-100 px-1 py-0.5 font-mono text-[0.82em] text-zinc-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300;

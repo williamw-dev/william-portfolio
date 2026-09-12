@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "preview:cloudflare": "pnpm build && wrangler pages dev dist",
     "deploy:cloudflare": "pnpm build && pnpm verify:bundle && wrangler pages deploy dist --project-name=william-portfolio",
-    "verify:bundle": "test -f dist/_worker.js/index.js && test -f dist/_routes.json && test -f dist/og.png && test -f dist/william-wautrin.jpeg && test -f dist/resume/william-wautrin-cv-fr.pdf && test -f dist/resume/william-wautrin-cv-en.pdf && test -n \"$(find dist/assets -type f -name '*.js' -print -quit)\"",
+    "verify:bundle": "test -f dist/_worker.js/index.js && test -f dist/_routes.json && test -f dist/og.png && test -f dist/og-gke.png && test -f dist/william-wautrin.jpeg && test -f dist/resume/william-wautrin-cv-fr.pdf && test -f dist/resume/william-wautrin-cv-en.pdf && test -n \"$(find dist/assets -type f -name '*.js' -print -quit)\"",
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",
     "check": "prettier --check ."

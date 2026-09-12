@@ -10,7 +10,7 @@ function Frame({
   children: React.ReactNode
 }) {
   return (
-    <figure className="blog-diagram architecture-grid my-9 overflow-hidden border-y-4 border-double px-4 py-5 sm:px-6">
+    <figure className="blog-diagram architecture-grid my-9 min-w-0 max-w-full overflow-hidden border-y-4 border-double px-4 py-5 sm:px-6">
       <figcaption className="mb-5 font-mono text-[8px] tracking-[0.1em] text-zinc-500">
         {label}
       </figcaption>

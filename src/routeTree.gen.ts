@@ -10,20 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as BlogDeploiementFullStackGkeGitopsRouteImport } from './routes/blog/deploiement-full-stack-gke-gitops'
+import { Route as BlogGkeGitopsFullStackDeploymentRouteImport } from './routes/blog/gke-gitops-full-stack-deployment'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExperienceRoute = ExperienceRouteImport.update({
@@ -46,56 +43,97 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogDeploiementFullStackGkeGitopsRoute =
+  BlogDeploiementFullStackGkeGitopsRouteImport.update({
+    id: '/blog/deploiement-full-stack-gke-gitops',
+    path: '/blog/deploiement-full-stack-gke-gitops',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BlogGkeGitopsFullStackDeploymentRoute =
+  BlogGkeGitopsFullStackDeploymentRouteImport.update({
+    id: '/blog/gke-gitops-full-stack-deployment',
+    path: '/blog/gke-gitops-full-stack-deployment',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
   '/experience': typeof ExperienceRoute
   '/projects': typeof ProjectsRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/deploiement-full-stack-gke-gitops': typeof BlogDeploiementFullStackGkeGitopsRoute
+  '/blog/gke-gitops-full-stack-deployment': typeof BlogGkeGitopsFullStackDeploymentRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
   '/experience': typeof ExperienceRoute
   '/projects': typeof ProjectsRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/deploiement-full-stack-gke-gitops': typeof BlogDeploiementFullStackGkeGitopsRoute
+  '/blog/gke-gitops-full-stack-deployment': typeof BlogGkeGitopsFullStackDeploymentRoute
+  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/blog': typeof BlogRoute
   '/experience': typeof ExperienceRoute
   '/projects': typeof ProjectsRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/blog/deploiement-full-stack-gke-gitops': typeof BlogDeploiementFullStackGkeGitopsRoute
+  '/blog/gke-gitops-full-stack-deployment': typeof BlogGkeGitopsFullStackDeploymentRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/blog' | '/experience' | '/projects' | '/robots.txt' | '/sitemap.xml'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    '/' | '/blog' | '/experience' | '/projects' | '/robots.txt' | '/sitemap.xml'
-  id:
-    | '__root__'
     | '/'
-    | '/blog'
     | '/experience'
     | '/projects'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/blog/deploiement-full-stack-gke-gitops'
+    | '/blog/gke-gitops-full-stack-deployment'
+    | '/blog/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/experience'
+    | '/projects'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/blog/deploiement-full-stack-gke-gitops'
+    | '/blog/gke-gitops-full-stack-deployment'
+    | '/blog'
+  id:
+    | '__root__'
+    | '/'
+    | '/experience'
+    | '/projects'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/blog/deploiement-full-stack-gke-gitops'
+    | '/blog/gke-gitops-full-stack-deployment'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BlogRoute: typeof BlogRoute
   ExperienceRoute: typeof ExperienceRoute
   ProjectsRoute: typeof ProjectsRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  BlogDeploiementFullStackGkeGitopsRoute: typeof BlogDeploiementFullStackGkeGitopsRoute
+  BlogGkeGitopsFullStackDeploymentRoute: typeof BlogGkeGitopsFullStackDeploymentRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -105,13 +143,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/experience': {
@@ -142,16 +173,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/deploiement-full-stack-gke-gitops': {
+      id: '/blog/deploiement-full-stack-gke-gitops'
+      path: '/blog/deploiement-full-stack-gke-gitops'
+      fullPath: '/blog/deploiement-full-stack-gke-gitops'
+      preLoaderRoute: typeof BlogDeploiementFullStackGkeGitopsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/gke-gitops-full-stack-deployment': {
+      id: '/blog/gke-gitops-full-stack-deployment'
+      path: '/blog/gke-gitops-full-stack-deployment'
+      fullPath: '/blog/gke-gitops-full-stack-deployment'
+      preLoaderRoute: typeof BlogGkeGitopsFullStackDeploymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BlogRoute: BlogRoute,
   ExperienceRoute: ExperienceRoute,
   ProjectsRoute: ProjectsRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  BlogDeploiementFullStackGkeGitopsRoute:
+    BlogDeploiementFullStackGkeGitopsRoute,
+  BlogGkeGitopsFullStackDeploymentRoute: BlogGkeGitopsFullStackDeploymentRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
