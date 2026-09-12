@@ -149,10 +149,9 @@ Après le cas Party/GKE, publier seulement des retours d’expérience réels. C
 
 ## Suivi recommandé
 
-| Fréquence | Contrôle |
-|---|---|
-| Après chaque déploiement | 200/404, canonical, hreflang, sitemap, données structurées |
-| Mensuel | Search Console : indexation, requêtes, CTR, pages et pays |
-| Trimestriel | Lighthouse mobile, crawl complet, liens externes et contenu dupliqué |
-| À chaque nouvel article | URL autonome, dates réelles, OG, BlogPosting, maillage et sitemap |
-
+| Fréquence                | Contrôle                                                             |
+| ------------------------ | -------------------------------------------------------------------- |
+| Après chaque déploiement | 200/404, canonical, hreflang, sitemap, données structurées           |
+| Mensuel                  | Search Console : indexation, requêtes, CTR, pages et pays            |
+| Trimestriel              | Lighthouse mobile, crawl complet, liens externes et contenu dupliqué |
+| À chaque nouvel article  | URL autonome, dates réelles, OG, BlogPosting, maillage et sitemap    |

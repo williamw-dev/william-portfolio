@@ -11,24 +11,24 @@ Le socle est sain : rendu SSR, pages rapides, URLs bilingues cohérentes, canoni
 
 Ce score est directionnel. Aucun accès à Google Search Console, CrUX, GA4 ou à une base de backlinks complète n’était disponible.
 
-| Axe | Score | État |
-|---|---:|---|
-| SEO technique | 78/100 | Bon socle, quelques finitions importantes |
-| Sitemap | 92/100 | Propre et exhaustif pour les routes actuelles |
-| Hreflang | 100/100 | Correct sur les 8 URLs |
-| On-page — accueil | 82/100 | Solide, titre à recentrer sur Cloud/Platform |
-| On-page — projets | 66/100 | Trop proche de l’accueil, hiérarchie faible |
-| On-page — expérience | 61/100 | Trop proche de l’accueil, titre générique |
-| On-page — blog | 57/100 | Article sans URL dédiée |
-| Schema.org | 62/100 | Person valide, graphe incomplet |
-| Contenu / E-E-A-T | 71/100 | Expérience crédible, autorité encore limitée |
-| GEO / visibilité IA | 52/100 | Entité identifiable, contenus peu adressables |
-| Architecture thématique | 38/100 | Un bon sujet, pas encore de vrai hub |
-| Performance mobile | 92/100 | LCP lab à 2,7 s, interaction fluide |
-| Performance desktop | 100/100 | Excellent en laboratoire |
-| Images | 88/100 | OG réussi, portrait surdimensionné pour l’usage |
-| Visuel mobile | 82/100 | Pas d’overflow, quelques cibles trop petites |
-| Backlinks | Données insuffisantes | Aucun score quantitatif défendable |
+| Axe                     |                 Score | État                                            |
+| ----------------------- | --------------------: | ----------------------------------------------- |
+| SEO technique           |                78/100 | Bon socle, quelques finitions importantes       |
+| Sitemap                 |                92/100 | Propre et exhaustif pour les routes actuelles   |
+| Hreflang                |               100/100 | Correct sur les 8 URLs                          |
+| On-page — accueil       |                82/100 | Solide, titre à recentrer sur Cloud/Platform    |
+| On-page — projets       |                66/100 | Trop proche de l’accueil, hiérarchie faible     |
+| On-page — expérience    |                61/100 | Trop proche de l’accueil, titre générique       |
+| On-page — blog          |                57/100 | Article sans URL dédiée                         |
+| Schema.org              |                62/100 | Person valide, graphe incomplet                 |
+| Contenu / E-E-A-T       |                71/100 | Expérience crédible, autorité encore limitée    |
+| GEO / visibilité IA     |                52/100 | Entité identifiable, contenus peu adressables   |
+| Architecture thématique |                38/100 | Un bon sujet, pas encore de vrai hub            |
+| Performance mobile      |                92/100 | LCP lab à 2,7 s, interaction fluide             |
+| Performance desktop     |               100/100 | Excellent en laboratoire                        |
+| Images                  |                88/100 | OG réussi, portrait surdimensionné pour l’usage |
+| Visuel mobile           |                82/100 | Pas d’overflow, quelques cibles trop petites    |
+| Backlinks               | Données insuffisantes | Aucun score quantitatif défendable              |
 
 ## Les cinq priorités
 
@@ -178,10 +178,10 @@ Aucun signal ne justifie une opération de désaveu.
 
 Mesures Lighthouse en laboratoire :
 
-| Profil | Score | FCP | LCP | TBT | CLS | TTFB |
-|---|---:|---:|---:|---:|---:|---:|
-| Mobile `/fr/` | 92 | 2,6 s | 2,7 s | 0 ms | 0,0017 | 115 ms |
-| Desktop `/fr/` | 100 | 0,6 s | 0,6 s | 0 ms | 0,0017 | 50 ms |
+| Profil         | Score |   FCP |   LCP |  TBT |    CLS |   TTFB |
+| -------------- | ----: | ----: | ----: | ---: | -----: | -----: |
+| Mobile `/fr/`  |    92 | 2,6 s | 2,7 s | 0 ms | 0,0017 | 115 ms |
+| Desktop `/fr/` |   100 | 0,6 s | 0,6 s | 0 ms | 0,0017 |  50 ms |
 
 Il n’y a ni données CrUX ni INP terrain. Ces mesures ne doivent donc pas être présentées comme le vécu réel des visiteurs.
 
@@ -218,4 +218,3 @@ Ce n’est pas le premier levier de croissance SEO, mais c’est une finition pr
 - Pas de données CrUX terrain ; PageSpeed Insights n’a pas fourni de résultat exploitable, Lighthouse local a été utilisé.
 - Pas de fournisseur de backlinks ; aucune métrique d’autorité, d’ancres, de liens nouveaux/perdus ou de toxicité ne peut être calculée honnêtement.
 - Les recherches publiques et Common Crawl sont des signaux directionnels, pas une preuve d’absence d’indexation ou de liens.
-
