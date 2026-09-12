@@ -3,9 +3,12 @@ import {
   LuBadgeCheck,
   LuBoxes,
   LuBraces,
+  LuCloud,
+  LuDatabase,
   LuMap,
   LuNetwork,
 } from 'react-icons/lu'
+import { Link } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 
 import * as m from '#/paraglide/messages'
@@ -20,7 +23,7 @@ export function SectionTitle({ children }: { children: React.ReactNode }) {
   )
 }
 
-const projects = [
+const featuredProjects = [
   {
     name: 'Lootopia',
     description: m.lootopia_description,
@@ -56,6 +59,27 @@ const projects = [
     Icon: LuBoxes,
     variant: 'gitops',
     signal: 'APP / INFRA DELIVERY',
+  },
+] as const
+
+const additionalProjects = [
+  {
+    name: 'Cloud VM App',
+    description: m.cloud_vm_description,
+    architecture: m.cloud_vm_architecture,
+    href: 'https://github.com/williamw-dev/cloud-vm-app',
+    Icon: LuCloud,
+    variant: 'azure',
+    signal: 'AZURE / SELF-SERVICE',
+  },
+  {
+    name: 'Travel Hub',
+    description: m.travel_hub_description,
+    architecture: m.travel_hub_architecture,
+    href: 'https://github.com/williamw-dev/travel-hub',
+    Icon: LuDatabase,
+    variant: 'data',
+    signal: 'CACHE / DATA GRAPH',
   },
 ] as const
 
@@ -103,6 +127,24 @@ const projectTopologies = {
       'M182 97H230',
     ],
   },
+  azure: {
+    nodes: [
+      [14, 52, 'USER'],
+      [102, 52, 'NEXT API'],
+      [202, 20, 'POSTGRES'],
+      [274, 84, 'AZURE VM'],
+    ],
+    paths: ['M84 65H102', 'M172 65H187V33H202', 'M187 65V97H274'],
+  },
+  data: {
+    nodes: [
+      [18, 52, 'API'],
+      [112, 20, 'REDIS'],
+      [238, 20, 'MONGO'],
+      [238, 84, 'NEO4J'],
+    ],
+    paths: ['M88 65H99V33H112', 'M182 33H238', 'M203 33V97H238'],
+  },
 } as const
 
 function ProjectVisual({
@@ -141,11 +183,21 @@ function ProjectVisual({
 }
 
 export function ProjectsSection({ page = false }: { page?: boolean }) {
+  const projects = page
+    ? [...featuredProjects, ...additionalProjects]
+    : featuredProjects
+  const ProjectHeading = page ? 'h2' : 'h3'
+
   return (
     <section
       className={page ? '' : 'section-boundary px-4 py-12 sm:px-6 sm:py-16'}
     >
       {!page && <SectionTitle>{m.projects_title()}</SectionTitle>}
+      {page && (
+        <p className="mb-8 max-w-xl text-xs leading-5 text-zinc-500">
+          {m.projects_page_intro()}
+        </p>
+      )}
       <div className="grid gap-3 sm:grid-cols-2">
         {projects.map(
           ({
@@ -167,10 +219,10 @@ export function ProjectsSection({ page = false }: { page?: boolean }) {
               <ProjectVisual variant={variant} />
               <div className="p-4 sm:p-5">
                 <div className="mb-3 flex items-center justify-between gap-4">
-                  <span className="flex items-center gap-2 text-sm font-medium">
+                  <ProjectHeading className="flex items-center gap-2 text-sm font-medium">
                     <Icon size={14} />
                     {name}
-                  </span>
+                  </ProjectHeading>
                   <LuArrowUpRight
                     size={14}
                     className="shrink-0 text-zinc-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -190,6 +242,15 @@ export function ProjectsSection({ page = false }: { page?: boolean }) {
           ),
         )}
       </div>
+      {!page && (
+        <Link
+          to="/projects"
+          className="mt-6 inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-blue-500"
+        >
+          {m.projects_more_label()}
+          <LuArrowUpRight size={12} />
+        </Link>
+      )}
     </section>
   )
 }
@@ -204,6 +265,7 @@ const experiences = [
       m.thales_current_detail_one,
       m.thales_current_detail_two,
       m.thales_current_detail_three,
+      m.thales_current_detail_four,
     ],
     current: true,
   },
@@ -212,7 +274,11 @@ const experiences = [
     role: m.thales_apprentice_role,
     period: m.thales_apprentice_period,
     description: m.thales_apprentice_description,
-    details: [m.thales_apprentice_detail_one, m.thales_apprentice_detail_two],
+    details: [
+      m.thales_apprentice_detail_one,
+      m.thales_apprentice_detail_two,
+      m.thales_apprentice_detail_three,
+    ],
     current: false,
   },
   {
@@ -226,11 +292,15 @@ const experiences = [
 ]
 
 export function ExperienceSection({ page = false }: { page?: boolean }) {
+  if (!page) {
+    return <ExperiencePreview />
+  }
+
   return (
-    <section
-      className={page ? '' : 'section-boundary px-4 py-12 sm:px-6 sm:py-16'}
-    >
-      {!page && <SectionTitle>{m.experience_title()}</SectionTitle>}
+    <section>
+      <p className="mb-8 max-w-xl text-xs leading-5 text-zinc-500">
+        {m.experience_page_intro()}
+      </p>
       <ExperienceTimeline>
         {experiences.map((experience) => (
           <article
@@ -251,7 +321,7 @@ export function ExperienceSection({ page = false }: { page?: boolean }) {
                 </p>
               </div>
               <div>
-                <h3 className="text-sm">{experience.role()}</h3>
+                <h2 className="text-sm">{experience.role()}</h2>
                 <p className="mt-2 text-xs leading-5 text-zinc-500">
                   {experience.description()}
                 </p>
@@ -271,6 +341,40 @@ export function ExperienceSection({ page = false }: { page?: boolean }) {
           </article>
         ))}
       </ExperienceTimeline>
+    </section>
+  )
+}
+
+function ExperiencePreview() {
+  return (
+    <section className="section-boundary px-4 py-12 sm:px-6 sm:py-16">
+      <SectionTitle>{m.experience_title()}</SectionTitle>
+      <ol className="border-y-4 border-double">
+        {experiences.map((experience) => (
+          <li
+            key={`${experience.company}-${experience.period()}`}
+            className="grid gap-2 border-b border-dotted py-4 last:border-0 sm:grid-cols-[160px_1fr_auto] sm:items-center sm:gap-6"
+          >
+            <div className="flex items-center gap-2 text-sm font-medium">
+              {experience.current && (
+                <span className="size-1.5 rounded-full bg-emerald-500" />
+              )}
+              {experience.company}
+            </div>
+            <p className="text-xs text-zinc-500">{experience.role()}</p>
+            <p className="font-mono text-[9px] text-zinc-500">
+              {experience.period()}
+            </p>
+          </li>
+        ))}
+      </ol>
+      <Link
+        to="/experience"
+        className="mt-6 inline-flex items-center gap-2 text-xs text-zinc-500 transition-colors hover:text-blue-500"
+      >
+        {m.experience_more_label()}
+        <LuArrowUpRight size={12} />
+      </Link>
     </section>
   )
 }
