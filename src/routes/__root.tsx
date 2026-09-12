@@ -10,6 +10,7 @@ import {
   isGkeArticlePath,
   SITE_ORIGIN,
 } from '#/config/site'
+import { getStructuredDataGraph } from '#/config/structured-data'
 import { gkeArticleEn } from '#/content/gke-article.en'
 import { gkeArticleFr } from '#/content/gke-article.fr'
 import { getLocale, localizeUrl } from '#/paraglide/runtime'
@@ -52,64 +53,15 @@ export const Route = createRootRoute({
       .href
     const personImage = new URL('/william-wautrin.jpeg', SITE_ORIGIN).href
     const { title, description } = seoCopy(pathname, locale)
-    const personId = `${SITE_ORIGIN}/#person`
-    const websiteId = `${SITE_ORIGIN}/#website`
-    const structuredData: Array<Record<string, unknown>> = [
-      {
-        '@context': 'https://schema.org',
-        '@type': 'Person',
-        '@id': personId,
-        name: 'William Wautrin',
-        url: `${SITE_ORIGIN}/`,
-        image: personImage,
-        jobTitle: 'Software & Platform Engineer',
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: 'Paris',
-          addressCountry: 'FR',
-        },
-        sameAs: [
-          'https://github.com/williamw-dev',
-          'https://x.com/builtbywilliam',
-          'https://www.linkedin.com/in/william-www',
-          'https://www.credly.com/users/william-wautrin',
-        ],
-        knowsAbout: [
-          'Cloud architecture',
-          'Kubernetes',
-          'Terraform',
-          'Platform engineering',
-          'Distributed systems',
-          'Backend engineering',
-        ],
-      },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        '@id': websiteId,
-        name: 'William Wautrin',
-        url: `${SITE_ORIGIN}/`,
-        inLanguage: ['en', 'fr'],
-        author: { '@id': personId },
-      },
-    ]
-
-    if (isArticle) {
-      structuredData.push({
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: title,
-        description,
-        image,
-        datePublished: '2025',
-        inLanguage: locale,
-        url: canonical,
-        mainEntityOfPage: canonical,
-        author: { '@id': personId },
-        isPartOf: { '@id': websiteId },
-        about: ['GKE', 'GitOps', 'Kubernetes', 'Argo CD'],
-      })
-    }
+    const structuredData = getStructuredDataGraph({
+      pathname,
+      canonical,
+      title,
+      description,
+      locale,
+      socialImage: image,
+      personImage,
+    })
     return {
       meta: [
         { charSet: 'utf-8' },
@@ -181,10 +133,12 @@ export const Route = createRootRoute({
         { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
         { rel: 'manifest', href: '/site.webmanifest' },
       ],
-      scripts: structuredData.map((data) => ({
-        type: 'application/ld+json',
-        children: JSON.stringify(data),
-      })),
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify(structuredData),
+        },
+      ],
     }
   },
   component: SiteShell,
