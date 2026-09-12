@@ -40,7 +40,9 @@ export const Route = createRootRoute({
   head: ({ matches }) => {
     const locale = getLocale()
     const matchedPath = matches.at(-1)?.pathname ?? '/'
-    const pathname = matchedPath.replace(/^\/(?:fr|en)(?=\/|$)/, '') || '/'
+    const unlocalizedPath =
+      matchedPath.replace(/^\/(?:fr|en)(?=\/|$)/, '') || '/'
+    const pathname = unlocalizedPath.replace(/\/+$/, '') || '/'
     const localizedPathname = getLocalizedContentPath(pathname, locale)
     const canonical = localizeUrl(new URL(localizedPathname, SITE_ORIGIN), {
       locale,
@@ -119,11 +121,6 @@ export const Route = createRootRoute({
         { name: 'description', content: description },
         { name: 'author', content: 'William Wautrin' },
         { name: 'robots', content: 'index, follow, max-image-preview:large' },
-        {
-          name: 'keywords',
-          content:
-            'cloud architecture, platform engineering, Kubernetes, Terraform, backend, distributed systems, DevOps',
-        },
         {
           name: 'theme-color',
           media: '(prefers-color-scheme: dark)',
