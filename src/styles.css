@@ -88,10 +88,6 @@
   .section-boundary {
     @apply border-t-4 border-double;
   }
-  .deferred-section {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 520px;
-  }
   .architecture-grid,
   .project-grid {
     background-image:

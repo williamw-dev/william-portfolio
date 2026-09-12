@@ -24,6 +24,12 @@ const SECURITY_HEADERS = {
     "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-src 'none'",
 } as const
 
+type CloudflareRequest = Request & {
+  cf?: {
+    country?: string | null
+  }
+}
+
 function withSecurityHeaders(response: Response) {
   const securedResponse = new Response(response.body, response)
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
@@ -32,26 +38,51 @@ function withSecurityHeaders(response: Response) {
   return securedResponse
 }
 
-const i18nMiddleware = createMiddleware().server(async ({ next, request }) => {
-  const url = new URL(request.url)
+function extractLocaleCookie(request: Request) {
   const localeCookiePrefix = `${cookieName}=`
-  const localeCookie = request.headers
+
+  return request.headers
     .get('cookie')
     ?.split(';')
     .map((cookie) => cookie.trim())
     .find((cookie) => cookie.startsWith(localeCookiePrefix))
     ?.slice(localeCookiePrefix.length)
-  const preferredLocale =
-    toLocale(localeCookie) ?? extractLocaleFromHeader(request)
+}
 
-  if (
-    url.pathname === '/' &&
-    preferredLocale &&
-    preferredLocale !== baseLocale
-  ) {
-    return withSecurityHeaders(
+function extractCloudflareCountry(request: Request) {
+  const cloudflareRequest = request as CloudflareRequest
+
+  if (cloudflareRequest.cf) {
+    return cloudflareRequest.cf.country?.toUpperCase()
+  }
+
+  // Wrangler does not always expose request.cf locally. The header mirrors the
+  // country value and keeps the redirect testable in the Pages emulator.
+  return request.headers.get('cf-ipcountry')?.toUpperCase()
+}
+
+function getPreferredLocale(request: Request) {
+  const selectedLocale = toLocale(extractLocaleCookie(request))
+  if (selectedLocale) return selectedLocale
+
+  const country = extractCloudflareCountry(request)
+  if (country) return country === 'FR' ? 'fr' : baseLocale
+
+  // Local development has no Cloudflare geolocation metadata.
+  return extractLocaleFromHeader(request) ?? baseLocale
+}
+
+const i18nMiddleware = createMiddleware().server(async ({ next, request }) => {
+  const url = new URL(request.url)
+  const preferredLocale = getPreferredLocale(request)
+
+  if (url.pathname === '/' && preferredLocale !== baseLocale) {
+    const response = withSecurityHeaders(
       Response.redirect(localizeUrl(url, { locale: preferredLocale }), 307),
     )
+    response.headers.set('Cache-Control', 'private, no-store')
+
+    return response
   }
 
   return paraglideMiddleware(request, async () => {
